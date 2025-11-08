@@ -131,3 +131,26 @@ class _WatchFaceState extends State<WatchFace> {
   Widget _timeRow(String name, DateTime time) => Text('$name: ${DateFormat('HH:mm').format(time)}',
       style: const TextStyle(color: Colors.white));
 }
+Future<void> _playAzan() async {
+  try {
+    // اذان فائل چیک کریں
+    await player.play(AssetSource('audio/azan.mp3'));
+  } catch (e) {
+    // اگر فائل نہ ہو تو صرف notification دکھائیں
+    await notif.show(
+      1,
+      'آذان کا وقت',
+      'اللہ أكبر اللہ أكبر – نماز کی تیاری کریں!',
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'azan_channel',
+          'آذان',
+          importance: Importance.high,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        ),
+      ),
+    );
+  }
+}
